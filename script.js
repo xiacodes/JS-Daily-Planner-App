@@ -1,22 +1,45 @@
 $("document").ready(function () {
-	//Variables
+	// VARIABLES
 	var timeBlocks = $(".time-block");
 	var currentDay = $("#currentDay");
 	var container = $(".container");
 	var hourNow = parseInt(moment().format("H"));
 	var currentToDoItem;
+	var keyForStoring;
+	var textarea;
+	var textareaText;
+	var keyForHour;
 
 	// ---------------------------------------------------- //
 
-	currentDay.text(moment().format("dddd, MMMM do"));
+	container.on("click", ".saveBtn", saveToDoItem);
 
 	// FUNCTIONS
+	function getTodaysDate() {
+		currentDay.text(moment().format("dddd, MMMM do"));
+	}
+
 	function creatingToDoList() {
 		toDoListHour = parseInt(currentToDoItem.attr("data-hour-time"));
 		currentToDoItem = $("this");
+		keyForStoring = "hour-" + toDoListHour;
 		timeBlocks.each(function () {
+			loadToDoFromStorage(keyForStoring);
 			updateToDoClass(hourNow, toDoListHour, currentToDoItem);
 		});
+	}
+	function saveToDoItem() {
+		textareaText = $(this).parent().children("textarea").val();
+		keyForHour = "hour-" + $(this).parent().attr("data-hour-time");
+		localStorage.setItem(keyForHour, textareaText);
+	}
+	function loadToDoFromStorage(keyForStoring) {
+		for (var i = 0; i < localStorage.length; i++) {
+			if (keyForStoring === localStorage.key(i)) {
+				textarea = $(this).children("textarea");
+				textarea.val(localStorage.getItem(localStorage.key(i)));
+			}
+		}
 	}
 
 	function updateToDoClass(hourNow, toDoListHour, currentToDoItem) {
