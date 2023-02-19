@@ -4,7 +4,7 @@ $("document").ready(function () {
 	var currentDay = $("#currentDay");
 	var container = $(".container");
 	var hourNow = parseInt(moment().format("H"));
-	var currentToDoItem = parseInt(moment().format("H"));
+	var currentToDoItem;
 
 	// ---------------------------------------------------- //
 
@@ -12,16 +12,23 @@ $("document").ready(function () {
 
 	// FUNCTIONS
 	function creatingToDoList() {
-		timeBlocks.each(function () {});
+		toDoListHour = parseInt(currentToDoItem.attr("data-hour-time"));
+		currentToDoItem = $("this");
+		timeBlocks.each(function () {
+			updateToDoClass(hourNow, toDoListHour, currentToDoItem);
+		});
 	}
 
-	function updateToDoClass(toDoHour) {
-		if (toDoHour === hourNow) {
-			toDo.addClass("present").removeClass("past future");
-		} else if (toDoHour < hourNow) {
-			toDo.addClass("past").removeClass("present future");
+	function updateToDoClass(hourNow, toDoListHour, currentToDoItem) {
+		if (toDoListHour === hourNow) {
+			currentToDoItem.addClass("present");
+			currentToDoItem.removeClass("past future");
+		} else if (toDoListHour < hourNow) {
+			currentToDoItem.addClass("past");
+			currentToDoItem.removeClass("present future");
 		} else {
-			toDo.addClass("future").removeClass("past present");
+			currentToDoItem.addClass("future");
+			currentToDoItem.removeClass("past present");
 		}
 	}
 });
