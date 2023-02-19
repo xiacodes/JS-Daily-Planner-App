@@ -15,8 +15,7 @@ $(document).ready(function () {
 			var listToDoItem = $(this);
 			var listHour = parseInt(listToDoItem.attr("data-hour"));
 			var key = "hour-" + listHour;
-			var timeClass = getTimeClass(listHour, hourRightNow);
-			listToDoItem.addClass(timeClass);
+			getTimeClass(listToDoItem, listHour, hourRightNow);
 
 			var textarea = listToDoItem.children("textarea");
 			var localStorageValue = localStorage.getItem(key);
@@ -25,13 +24,13 @@ $(document).ready(function () {
 			}
 		});
 	}
-	function getTimeClass(listHour, hourRightNow) {
+	function getTimeClass(listToDoItem, listHour, hourRightNow) {
 		if (listHour === hourRightNow) {
-			return "present";
+			listToDoItem.addClass("present").removeClass("past future");
 		} else if (listHour < hourRightNow) {
-			return "past";
+			listToDoItem.addClass("past").removeClass("present future");
 		} else {
-			return "future";
+			listToDoItem.addClass("future").removeClass("past present");
 		}
 	}
 	function newToDoItem() {
